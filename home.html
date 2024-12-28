@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Na Pariyojana Store</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script> <!-- Link to your script.js -->
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Project Card Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #87CEEB, #1e90ff); /* Sky Blue Gradient */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: backgroundAnimation 15s ease-in-out infinite; /* Smooth background transition */
+        }
+        
+        /* Background Animation */
+        @keyframes backgroundAnimation {
+            0% {
+                background: #87CEEB;
+            }
+            50% {
+                background: #1e90ff;
+            }
+            100% {
+                background: #87CEEB;
+            }
+        }
+        
+        /* User Info Icon Styling (top-right corner) */
+        .user-info-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            border-radius: 50%;
+            padding: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease, filter 0.3s ease;
+            will-change: transform, box-shadow, background-color, filter;
+        }
+        
+        /* FontAwesome Icon Styling */
+        .user-info-icon i {
+            font-size: 28px;
+            color: #1e90ff;
+            transition: color 0.3s ease-in-out;
+        }
+        
+        /* Hover effect for icon */
+        .user-info-icon:hover {
+            transform: scale(1.3); /* Zoom in */
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            background-color: #f0f8ff; /* Light blue background on hover */
+            filter: brightness(1.2); /* Add glow effect */
+        }
+        
+        .user-info-icon:hover i {
+            color: #4682b4; /* Change icon color on hover */
+        }
+        
+        /* User Info Modal Styling */
+        .user-info-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease-in-out; /* Fade-in effect */
+        }
+        
+        /* Modal Fade-in Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* User Info Modal Content */
+        .user-info-content {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 80%;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: showModal 0.6s forwards ease-out; /* Modal content slide and scale animation */
+        }
+        
+        /* Modal Slide-up Animation */
+        @keyframes showModal {
+            0% {
+                transform: scale(0.9) translateY(30px);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Modal Content Text Styling */
+        .user-info-content div {
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            text-align: left;
+        }
+        
+        /* Modal Header Styling */
+        .user-info-content h2 {
+            margin-top: 0;
+            font-size: 32px;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* Logout Button Styling */
+        .logout-btn {
+            background: linear-gradient(135deg, #1e90ff, #4682b4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 30px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        /* Hover Effect for Logout Button */
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #4682b4, #1e90ff);
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logout-btn:active {
+            transform: translateY(2px);
+        }
+        
+        /* Close Button Styling */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 99, 71, 0.8); /* Semi-transparent red */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        /* Close Button Hover */
+        .close-btn:hover {
+            background-color: rgba(255, 69, 0, 0.8); /* Stronger red with transparency */
+            transform: scale(1.1); /* Slight zoom effect */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+        }
+        /* Project Card Styling */
+        .projectCard {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #fff;
+            overflow: hidden;
+            width: 300px; /* Fixed width for all cards */
+            height: 450px; /* Fixed height for all cards */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Distributes space between image and text */
+        }
+        
+        /* Styling for image inside project card */
+        .projectCard img {
+            width: 100%; /* Ensure the image takes the full width of the container */
+            height: 300px;
+            object-fit: cover; /* Makes sure the image covers the entire container without distortion */
+            border-radius: 6px;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease; /* Smooth transition on hover */
+        }
+        
+        /* Hover effect for the project card */
+        .projectCard:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Hover effect for images inside the project card */
+        .projectCard img:hover {
+            transform: scale(1.05); /* Slight zoom effect on hover */
+            cursor: pointer;
+        }
+        
+        
+        
+        
+        /* View Details Container Styling */
+        .details-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 40px auto;
+            animation: fadeIn 0.6s ease-out;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        
+        .details-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .details-container img {
+            width: 100%;
+            height: auto;
+            max-height: 350px;
+            object-fit: contain;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .details-container img:hover {
+            transform: scale(1.1); /* Slight zoom effect on hover */
+        }
+        
+        .details-container h1 {
+            color: #2e2e2e;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            font-family: 'Arial', sans-serif;
+            font-weight: 600;
+        }
+        
+        .details-container p {
+            margin-bottom: 25px;
+            font-size: 1.15rem;
+            color: #666;
+            line-height: 1.7;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        /* Scrollable Component List */
+        .details-container ul {
+            display: block;
+            margin-bottom: 20px;
+            padding: 0;
+            list-style-type: none;
+            font-size: 1.1rem;
+            color: #444;
+            max-height: 200px; /* Fixed height for scrolling */
+            overflow-y: auto; /* Allows scrolling when the list exceeds the container height */
+            border-radius: 10px;
+            padding-right: 10px; /* Adds some space for the scrollbar */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for the scrollable area */
+        }
+        
+        /* Styling for each component */
+        .details-container ul li {
+            font-weight: bold;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;  /* Space between each component */
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        /* Hover effects for components with gradient background */
+        .details-container ul li:hover {
+            background: linear-gradient(90deg, #007bff, #6610f2); /* Gradient background on hover */
+            color: white;
+            transform: translateX(6px); /* Slight horizontal shift on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow on hover */
+        }
+        
+        /* Hover effects for buttons */
+        .details-container .btn {
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 20px;
+            letter-spacing: 1px;
+        }
+        
+        /* Hover effects for buttons */
+        .details-container .btn:hover {
+            background: linear-gradient(90deg, #007bff, #6610f2); /* Gradient background for button */
+            transform: translateY(-2px);
+        }
+        
+        /* Button for Specific Project */
+        .button-specific-project {
+            display: inline-block;
+            padding: 12px 24px; /* Increased padding for a bigger button */
+            font-size: 18px; /* Larger text size for better readability */
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 150px; /* Rounded button with a smooth curve */
+            background: linear-gradient(90deg, #00c6ff, #0072ff); /* Sky blue gradient */
+            color: white;
+            border: 2px solid transparent; /* Transparent border for gradient effect */
+            transition: all 0.3s ease-in-out; /* Smooth transition for effects */
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); /* Soft blue shadow for depth */
+            text-transform: uppercase; /* Uppercase text for better emphasis */
+        }
+        
+        /* Hover effect for Specific Project Button */
+        .button-specific-project:hover {
+            background: linear-gradient(90deg, #0072ff, #00c6ff); /* Reverse gradient for a dynamic effect */
+            color: #ffffff; /* Keep text white for contrast */
+            transform: scale(1.1); /* Increase size on hover */
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5); /* Stronger shadow for more depth */
+        }
+        
+        /* Active state for Specific Project Button */
+        .button-specific-project:active {
+            transform: scale(0.98); /* Slightly shrink when clicked */
+            box-shadow: 0 4px 
+            10px rgba(0, 123, 255, 0.3); /* Reset the shadow when clicked */
+        }
+        
+        /* Optional: Focus effect for accessibility */
+        .button-specific-project:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); /* Blue outline for focus state */
+        }
+        
+        /* Simplified Button */
+        .button {
+            background: linear-gradient(90deg, #007bff, #6610f2); /* Blue to purple gradient */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            text-align: center;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out; /* Smooth transition on hover */
+        }
+        
+        /* Hover effect (Simple) */
+        .button:hover {
+            background: linear-gradient(90deg, #0056b3, #5a0b96); /* Darker gradient on hover */
+            transform: scale(1.05); /* Slight zoom effect */
+        }
+        
+        /* Active effect (Simple) */
+        .button:active {
+            transform: scale(0.98); /* Shrink the button on click */
+        }
+        
+        /* Container for the button (if needed) */
+        .button-container {
+            display: flex;
+            justify-content: flex-start; /* Aligns the button to the left */
+            padding: 20px;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f9;
+            animation: backgroundAnimation 10s ease-in-out infinite;
+            overflow: auto; /* Enable scrolling */
+            scroll-behavior: smooth; /* Enable smooth scrolling */
+        }
+        
+        @keyframes backgroundAnimation {
+            0% {
+                background: #f4f4f9;
+            }
+            50% {
+                background: #e0e0e0;
+            }
+            100% {
+                background: #f4f4f9;
+            }
+        }
+        
+        @keyframes backgroundAnimation {
+            0% { background: #f4f4f9; }
+            50% { background: #e0e0e0; }
+            100% { background: #f4f4f9; }
+        }
+        
+        h1 {
+            text-align: center;
+            color: #7A7B7B;
+            font-size: 36px;
+            margin-bottom: 20px;
+            animation: fadeInUp 1.5s ease-in-out;
+        }
+        
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        h3 {
+            color: #7A7B7B;
+            font-size: 24px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        h3:hover {
+            color: #1a73e8;
+            text-shadow: 0 0 10px #1a73e8, 0 0 20px #1a73e8;
+        }
+        
+        ul {
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 220px;
+            list-style: none;
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        
+        li {
+            font-size: 22px;
+            margin: 10px;
+        }
+        
+        li i {
+            color: #1a73e8;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        
+        li i:hover {
+            color: #0a58ca;
+            transform: scale(1.2);
+            text-shadow: 0 0 10px #1a73e8, 0 0 20px #1a73e8;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        /* Popup Styling */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: black;
+            padding: 75px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            animation: zoomInEffect 0.5s ease-in-out, slideUp 0.5s ease-in-out;
+        }
+        
+        @keyframes zoomInEffect {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            0% { transform: translate(-50%, -40%); opacity: 0; }
+            100% { transform: translate(-50%, -50%); opacity: 1; }
+        }
+        
+        /* Developer Info Button */
+        .dev-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            animation: pulseButton 2s infinite;
+        }
+        
+        @keyframes pulseButton {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .dev-btn:hover {
+            background-color: #0a58ca;
+            transform: scale(1.1);
+            animation: glowButton 2s ease-in-out infinite;
+        }
+        
+        @keyframes glowButton {
+            0% { box-shadow: 0 0 10px #1a73e8, 0 0 20px #1a73e8, 0 0 30px #1a73e8; }
+            100% { box-shadow: 0 0 20px #1a73e8, 0 0 40px #1a73e8, 0 0 60px #1a73e8; }
+        }
+        
+        /* Animations for the sentence */
+        .scrolling-text-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 10px;
+        }
+        
+        .scrolling-text {
+            white-space: nowrap;
+            animation: scrollText 10s linear infinite;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            padding: 10px;
+        }
+        
+        @keyframes scrollText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .scrolling-text:hover {
+            color: #ff5722;
+            text-shadow: 0 0 20px rgba(255, 87, 34, 0.8), 0 0 30px rgba(255, 87, 34, 0.8);
+            cursor: pointer;
+        }
+        /* Custom Style for Icon */
+        .icon-container {
+            display: flex;
+            justify-content: flex-start;  /* Aligns icon to the left */
+            align-items: center;  /* Centers icon vertically */
+            font-size: 40px;
+            color: white; /* Green color */
+            margin-left: 50px;  /* Adds space from the left side of the page */
+            margin-top: 10px;  /* Adds space above the icon to make it appear lower */
+        }
+        /* General Responsive Settings */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f4f4f9;
+            animation: backgroundAnimation 10s ease-in-out infinite;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            scroll-behavior: smooth;
+        }
+        
+        /* For Extra Small Screens (Phones) */
+        @media (max-width: 576px) {
+            body {
+                flex-direction: column; /* Stack elements vertically */
+                padding: 10px;
+            }
+        
+            h1 {
+                font-size: 24px; /* Reduce heading size */
+            }
+        
+            h3 {
+                font-size: 18px;
+            }
+        
+            ul {
+                width: 100%; /* Full-width for small screens */
+                padding: 15px;
+                box-shadow: none; /* Simplify design */
+            }
+        
+            .projectCard {
+                width: 90%; /* Shrink card width for mobile */
+                height: auto; /* Allow height to adjust dynamically */
+            }
+        
+            .projectCard img {
+                height: auto; /* Ensure the image doesn't overflow */
+            }
+        
+            .details-container {
+                padding: 20px;
+            }
+        
+            .logout-btn {
+                padding: 10px 20px; /* Smaller button */
+                font-size: 16px;
+            }
+        
+            .dev-btn {
+                bottom: 10px;
+                right: 10px;
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        
+            .scrolling-text {
+                font-size: 18px; /* Smaller text for scrolling text */
+            }
+        }
+        
+        /* For Tablets (Portrait and Landscape) */
+        @media (min-width: 577px) and (max-width: 992px) {
+            body {
+                padding: 20px;
+                flex-wrap: wrap; /* Wrap content for better layout */
+            }
+        
+            h1 {
+                font-size: 28px;
+            }
+        
+            ul {
+                width: 80%; /* Adjust width for tablets */
+            }
+        
+            .projectCard {
+                width: 45%; /* Two cards side-by-side */
+                height: auto;
+            }
+        
+            .details-container {
+                width: 90%;
+                padding: 30px;
+            }
+        }
+        
+        /* For Desktops and Larger Screens */
+        @media (min-width: 993px) {
+            .projectCard {
+                width: 300px; /* Fixed width for cards */
+                height: 450px; /* Fixed height for cards */
+            }
+        
+            .details-container {
+                max-width: 800px;
+            }
+        
+            .logout-btn {
+                font-size: 18px;
+                padding: 14px 30px;
+            }
+        
+            .dev-btn {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+        }
+        
+        /* Responsive Scrolling Text */
+        @media (max-width: 768px) {
+            .scrolling-text-container {
+                padding: 5px; /* Reduce padding for smaller screens */
+            }
+        
+            .scrolling-text {
+                font-size: 20px;
+            }
+        }
+        
+        </style>
+</head>
+<body>
+    <div class="user-info-icon" id="userInfoIcon">
+        <i class="fa-solid fa-user"></i> <!-- FontAwesome user icon -->
+    </div>
+
+    <!-- User Info Modal (Hidden Initially) -->
+    <div class="user-info-modal" id="userInfoModal">
+        <div class="user-info-content">
+            <button class="close-btn" id="closeBtn">X</button>
+            <h2>User Details</h2>
+            <div id="username"></div>
+            <div id="userAge"></div>
+            <div id="userGender"></div>
+            <div id="userPhone"></div>
+            <div id="userEmail"></div>
+            <div id="userAddress"></div>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </div>
+
+    <!-- Home Section -->
+    <div id="home" class="home-container">
+        <!-- Header Section -->
+        <header class="bg-blue-100 p-4 rounded-t-xl shadow-md flex justify-between items-center">
+            <!-- Scrolling Text Above Search Bar -->
+            <div class="scrolling-text-container">
+                <div class="scrolling-text">Na Pariyojana – Crafting Quality, Delivering Affordability</div>
+            </div>
+                    <!-- Icon Container with the House Icon -->
+            <div class="icon-container">
+                <i class="fa-solid fa-house"></i>
+            </div>
+            <input type="text" id="searchBar" placeholder="Search projects..." oninput="dynamicSearch()"
+                class="w-1/2 p-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+            
+            <!-- Specific Project Button -->
+            <div>
+                <a href="SpecificProject.html" class="button secondary">Specific Project</a>
+            </div>
+        </header>
+
+        <!-- Project List Section -->
+        <div id="projectList" class="project-list mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Project cards will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <!-- Project Details Section -->
+    <div id="projectDetails" class="details-container" style="display: none;">
+        <h1 id="projectTitle"></h1>
+        <img id="projectImage" alt="Project Image">
+        <p id="projectDescription"></p>
+        <h3>Components Used</h3>
+        <ul id="componentsUsed"></ul>
+
+        <!-- Buttons -->
+        <a href="buynow.html" class="button secondary">Buy Now</a>
+        <button onclick="backToHome()" class="button">Back to Home</button>
+    </div>
+
+    <!-- Developer Info Button -->
+    <button class="dev-btn" onclick="showPopup()">Developer Info</button>
+
+    <div id="popup" class="popup">
+        <h1>Developer Info</h1>
+        <h3>Nagella Nagavenkat</h3>
+        <ul>
+            <li><a href="mailto:nagellanagavenkat@gmail.com"><i class="fas fa-envelope"></i></a></li>
+            <li><a href="https://www.linkedin.com/in/nagella-nagavenkat26" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="https://github.com/NagavenkatNagella" target="_blank"><i class="fab fa-github"></i></a></li>
+            <li><a href="https://x.com/Nagavenkat26" target="_blank"><i class="fab fa-twitter"></i></a></li>
+        </ul>
+    </div>
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        // Display the user's details in the dropdown
+        function showUserDetails() {
+            document.getElementById('username').innerText = `Username: ${user.username}`;
+            document.getElementById('userEmail').innerText = `Email: ${user.email}`;
+            document.getElementById('userAge').innerText = `Age: ${user.age}`;
+            document.getElementById('userPhone').innerText = `Phone: ${user.phone}`;
+            document.getElementById('userAddress').innerText = `Address: ${user.address}`;
+            document.getElementById('userGender').innerText = `Gender: ${user.gender}`;
+        }
+
+        // Open the user info modal when the icon is clicked
+        document.getElementById('userInfoIcon').addEventListener('click', () => {
+            showUserDetails();
+            document.getElementById('userInfoModal').style.display = 'flex';
+        });
+
+        // Close the user info modal when the close button is clicked
+        document.getElementById('closeBtn').addEventListener('click', () => {
+            document.getElementById('userInfoModal').style.display = 'none';
+        });
+
+        // Logout functionality
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            // Redirect to the index.html page directly
+            window.location.href = 'index.html';
+        });
+
+
+        // Function to handle the "Back to Home" button
+        function backToHome() {
+            document.getElementById("projectDetails").style.display = "none";
+            document.getElementById("home").style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scroll back to the top
+        }
+
+        // Function to dynamically search projects
+        function dynamicSearch() {
+            const searchQuery = document.getElementById('searchBar').value.toLowerCase();
+            const projectList = document.getElementById('projectList').children;
+            
+            for (let i = 0; i < projectList.length; i++) {
+                let projectTitle = projectList[i].querySelector('h3').textContent.toLowerCase();
+                projectList[i].style.display = projectTitle.includes(searchQuery) ? '' : 'none';
+            }
+        }
+
+        // Ensure home section is visible when loaded
+        window.onload = function() {
+            document.getElementById("home").style.display = "block";  // Show home section
+            loadProjects();  // Load projects dynamically from script.js
+        };
+
+        // Function to view project details
+        function viewDetails(id) {
+            const currentProject = projects.find(p => p.id === id);
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('projectDetails').style.display = 'block';
+            document.getElementById('projectTitle').innerText = currentProject.title;
+            document.getElementById('projectImage').src = currentProject.image;
+            document.getElementById('projectDescription').innerText = currentProject.description;
+            document.getElementById('componentsUsed').innerHTML = currentProject.components.map(c => `<li>${c}</li>`).join('');
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scroll to top
+        }
+
+        // Function to Show Popup for 5 Seconds
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            const btn = document.querySelector('.dev-btn');
+            
+            // Add animation to button when clicked
+            btn.style.animation = 'scaleUp 0.5s ease-in-out';
+            setTimeout(() => {
+                btn.style.animation = ''; // Reset button animation after click
+            }, 500);
+
+            popup.style.display = 'block';
+
+            // Hide the popup after 5 seconds
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 7777); // Adjusted the timeout to 5 seconds for better user experience
+        }
+    </script>
+</body>
+</html>

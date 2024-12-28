@@ -1,0 +1,498 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Na Pariyojana Store</title>
+    <link rel="icon" href="./images/logo.jpg" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js" defer></script>
+    <style>
+        /* Fade-in Animation */
+        .fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Success message overlay styling */
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+        }
+
+        .tick-circle {
+            background-color: #4CAF50; /* Green background */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 36px;
+        }
+    
+        .tick {
+            font-weight: bold; /* Bold tick */
+        }
+
+        @keyframes tickAnimation {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Processing overlay style */
+        .processing-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            background-color: rgba(0, 0, 0, 0.3); /* transparent background */
+        }
+
+        .processing-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: blue;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        /* Dot animation for processing */
+        .dot {
+            position: relative;
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            border-radius: 50%;
+            background-color: #4c8bf5;
+            animation: loading 1.2s infinite ease-in-out;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes loading {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+         /* Modal Overlay */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        animation: fadeIn 0.5s ease-in-out;
+        backdrop-filter: blur(5px);
+    }
+
+    /* Green Transparent Glow Screen */
+    .green-glow-screen {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(76, 175, 80, 0.2); /* Transparent green color */
+        border-radius: 50%;
+        animation: pulseGlow 3s ease-in-out infinite, rotateGlow 8s linear infinite;
+        z-index: -1;
+        filter: blur(50px);
+    }
+
+    /* Glow Pulse Animation */
+    @keyframes pulseGlow {
+        0% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+    }
+
+    /* Rotate Glow Animation */
+    @keyframes rotateGlow {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background: #fff;
+        padding: 40px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        animation: scaleUp 0.5s ease-in-out, zoomIn 0.7s ease-in-out, shadowPulse 2s ease-in-out infinite;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+    }
+
+    /* Zoom-in Animation */
+    @keyframes zoomIn {
+        0% {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* Shadow Pulse Animation */
+    @keyframes shadowPulse {
+        0% {
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.4);
+        }
+        100% {
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
+        }
+    }
+
+    /* Tick Mark Container */
+    .tick-mark-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px; /* Space between tick and text */
+    }
+
+    /* Tick Mark with Zoom Front Animation */
+    .tick-mark {
+        background-color: #4CAF50; /* Green background */
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 36px;
+        animation: zoomFront 1.5s ease-in-out infinite, glowEffect 1.5s ease-in-out infinite alternate;
+        box-shadow: 0 0 20px 5px rgba(76, 175, 80, 0.5);
+    }
+
+    /* Zoom Front Animation */
+    @keyframes zoomFront {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.3);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    /* Glow Effect */
+    @keyframes glowEffect {
+        0% {
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        }
+        100% {
+            box-shadow: 0 0 25px rgba(76, 175, 80, 1);
+        }
+    }
+
+    /* Modal Text */
+    .modal-text-slide {
+        font-size: 22px;
+        font-weight: bold;
+        color: #333;
+        opacity: 0;
+        animation: slideIn 0.5s ease-in-out forwards, textColorChange 3s ease-in-out infinite alternate;
+    }
+
+    .modal-text-slide:nth-child(1) {
+        animation-delay: 0.5s;
+    }
+
+    .modal-text-slide:nth-child(2) {
+        animation-delay: 1s;
+    }
+
+    /* Slide-in Text Effect */
+    @keyframes slideIn {
+        0% {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Text Color Change Animation */
+    @keyframes textColorChange {
+        0% {
+            color: #333;
+        }
+        50% {
+            color: #4CAF50;
+        }
+        100% {
+            color: #333;
+        }
+    }
+
+    /* Modal Fade-in */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Scale-up Animation */
+    @keyframes scaleUp {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .tick-circle,
+        .tick-mark {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+
+        .modal-content {
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+        }
+
+        .modal-text-slide {
+            font-size: 18px;
+        }
+
+        .processing-text {
+            font-size: 20px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin: 0 3px;
+        }
+
+        .tick-mark-container {
+            margin-bottom: 15px;
+        }
+
+        .success-overlay,
+        .processing-overlay,
+        .modal-overlay {
+            padding: 10px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .tick-circle,
+        .tick-mark {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+        }
+
+        .modal-content {
+            padding: 15px;
+        }
+
+        .modal-text-slide {
+            font-size: 16px;
+        }
+
+        .processing-text {
+            font-size: 18px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            margin: 0 2px;
+        }
+
+        .tick-mark-container {
+            margin-bottom: 10px;
+        }
+    }
+    
+    </style>
+</head>
+<body class="bg-blue-50 font-sans">
+    <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg mt-12 fade-in">
+        <h1 class="text-2xl font-semibold text-center text-blue-800 mb-6">Buy Now</h1>
+
+        <div class="mb-6">
+            <label for="projectSelect" class="text-lg font-medium text-blue-700">Select Project</label>
+            <select id="projectSelect" class="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="fetchProjectDetails()">
+                <option value="" disabled selected>Select a project</option>
+                <option value="1">Auto Irrigation System</option>
+                <option value="2">Air Quality Monitoring</option>
+                <option value="3">Line Following Robot</option>
+                <option value="4">Obstacle Avoidance Robot</option>
+                <option value="5">Sign Language Conversion</option>
+                <option value="6">Smart Door Bell</option>
+                <option value="7">Weather Monitoring System</option>
+                <option value="8">River and Drain Cleaning Robot</option>
+                <option value="9">Waste Segregation System</option>
+                <option value="10">Fire Fighting Robot</option>
+                <option value="11">Footstep Energy Generator</option>
+                <option value="12">Customized Wind Turbine</option>
+            </select>
+        </div>
+
+        <div id="projectDetails" class="mb-6 hidden">
+            <img id="projectImage" src="" alt="Project Image" class="w-full h-auto rounded-lg mb-4">
+            <h2 id="projectTitle" class="text-xl font-semibold text-blue-700"></h2>
+            <p id="projectDescription" class="text-lg text-gray-700"></p>
+            <ul id="componentsUsed" class="list-disc pl-6 mt-4"></ul>
+        </div>
+
+        <form id="buyNowForm" class="space-y-4" onsubmit="event.preventDefault(); buyNow();">
+            <div>
+                <label for="name" class="text-lg font-medium text-blue-700">Your Name</label>
+                <input type="text" id="name" class="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your name" required>
+            </div>
+            <div>
+                <label for="phoneNumber" class="text-lg font-medium text-blue-700">Phone Number</label>
+                <input type="text" id="phoneNumber" class="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your phone number" required>
+            </div>
+            <div>
+                <label for="email" class="text-lg font-medium text-blue-700">Email</label>
+                <input type="email" id="email" class="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" required>
+            </div>
+            <div>
+                <label for="address" class="text-lg font-medium text-blue-700">Address</label>
+                <textarea id="address" class="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your address" required></textarea>
+            </div>
+            <div>
+                <button type="submit" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700">
+                    Buy Now
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-4 text-center">
+            <button onclick="backToHome();" class="py-2 px-6 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+                Back to Home
+            </button>
+        </div>
+    </div>
+    <script>
+        function backToHome() {
+            window.location.href = 'home.html'; // Redirects directly to home.html
+        }
+    </script>
+    
+    <!-- Processing Message -->
+    <div id="processingMessage" class="hidden">
+        <div class="processing-overlay">
+            <div>
+                <span class="processing-text">Processing</span>
+                <div class="flex justify-center mt-4">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="hidden">
+        <div class="success-overlay">
+            <div>
+                <span class="tick">✓</span>
+                <p class="text-xl font-semibold text-blue-700">Order Booked Successfully!</p>
+                <p class="text-lg text-gray-700">Thank you for your purchase! Redirecting...</p>
+            </div>
+        </div>
+    </div>
+<!-- Centered Modal for Order Booked -->
+<div id="orderBookedModal" class="hidden modal-overlay">
+    <!-- Green Transparent Glow Screen -->
+    <div class="green-glow-screen"></div>
+
+    <!-- Modal Content -->
+    <div class="modal-content">
+        <!-- Tick Mark Circle -->
+        <div class="tick-mark-container">
+            <div class="tick-mark">
+                <span class="tick">✓</span>
+            </div>
+        </div>
+
+        <!-- Modal Text -->
+        <p class="modal-text modal-text-slide">Thank you 😊</p>
+        <p class="modal-text modal-text-slide">Order Booked Successfully!</p>
+    </div>
+</div>
+
+    
+</body>
+</html>

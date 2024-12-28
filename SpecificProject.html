@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Na Pariyojana Store</title>
+    <link rel="icon" href="./images/logo.jpg" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+       
+/* Green Transparent Glow (Full Screen) */
+.green-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300%;
+    height: 300%;
+    background: rgba(76, 175, 80, 0.3); /* Transparent green */
+    border-radius: 50%;
+    animation: pulseGlow 2.5s ease-in-out infinite, shimmerEffect 3s ease-in-out infinite;
+    z-index: 0; /* Ensure it's behind the order confirmation */
+    filter: blur(60px); /* Creating a more intense glowing effect */
+    backdrop-filter: blur(8px); /* Adding backdrop blur */
+}
+
+/* Order Confirmed Content */
+.order-confirmed {
+    position: relative; /* Ensure it's above the green glow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    animation: zoomIn 0.7s ease-in-out, scaleUp 0.5s ease-in-out, textGlow 3s ease-in-out infinite;
+    text-align: center;
+    z-index: 1; /* Ensures it's above the green-glow */
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
+    
+}
+
+/* Zoom-in Animation */
+@keyframes zoomIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Pulse Glow Animation */
+@keyframes pulseGlow {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+}
+
+/* Shimmer Effect for Glow */
+@keyframes shimmerEffect {
+    0% {
+        background: rgba(76, 175, 80, 0.3);
+    }
+    50% {
+        background: rgba(76, 175, 80, 0.5); /* Slightly brighter green */
+    }
+    100% {
+        background: rgba(76, 175, 80, 0.3);
+    }
+}
+
+/* Text Glow Effect */
+@keyframes textGlow {
+    0% {
+        color: #4CAF50;
+        text-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+    }
+    50% {
+        color: #388E3C;
+        text-shadow: 0 0 20px rgba(76, 175, 80, 1), 0 0 30px rgba(76, 175, 80, 0.7);
+    }
+    100% {
+        color: #4CAF50;
+        text-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+    }
+}
+
+/* Tick Mark Animation */
+.tick-mark-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:#8fbc8f ; /* Green background for the circle */
+    border-radius: 50%; /* Circular shape */
+    width: 70px; /* Adjust size */
+    height: 70px; /* Adjust size */
+    animation: tickZoomIn 0.6s ease-out, tickGlow 1.5s ease-in-out infinite;
+}
+
+/* Bold and Glowing Tick Mark */
+.tick-mark {
+    animation: tickZoomIn 0.6s ease-out, tickGlow 1.5s ease-in-out infinite;
+    color: white; /* White color for tick mark */
+    font-size: 36px; /* Adjust size */
+    font-weight: bold; /* Bold text */
+    text-shadow: 0 0 20px(76, 175, 80, 0.6), 0 0 30px rgba(76, 175, 80, 1); /* Glow effect */
+    transform-origin: center;
+}
+
+/* Zoom-In Animation for Tick Mark */
+@keyframes tickZoomIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Glow Animation for Tick Mark */
+@keyframes tickGlow {
+    0% {
+        color: #4CAF50;
+        text-shadow: 0 0 15px rgba(76, 175, 80, 0.6), 0 0 25px rgba(76, 175, 80, 1);
+    }
+    50% {
+        color: #388E3C;
+        text-shadow: 0 0 25px rgba(76, 175, 80, 1), 0 0 35px rgba(76, 175, 80, 0.7);
+    }
+    100% {
+        color: #4CAF50;
+        text-shadow: 0 0 15px rgba(76, 175, 80, 0.6), 0 0 25px rgba(76, 175, 80, 1);
+    }
+}
+
+
+
+        /* Button Animations */
+        .btn-hover:hover {
+            transform: scale(1.05);
+            background-color: #007bff;
+            transition: all 0.3s ease;
+        }
+
+        .btn-hover:active {
+            transform: scale(0.98);
+            background-color: #0056b3;
+        }
+
+        .form-container {
+            background: linear-gradient(to bottom, #ffffff, #f7f8fc);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Custom Styles for Form Elements */
+        input:focus, textarea:focus, button:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
+            border-color: #0056b3;
+        }
+
+        /* Dot animation for loading message */
+        .dot-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #007bff;
+            opacity: 0;
+            animation: dot-blink 1.5s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes dot-blink {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+    </style>
+
+
+
+</head>
+<body class="bg-blue-50 font-sans">
+
+    <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg mt-12 fade-in bg-transparent">
+        <div class="form-container">
+            <h1 class="text-3xl font-semibold text-center text-blue-800 mb-8">Submit Your Specific Project</h1>
+            <form id="specificProjectForm" class="space-y-6" onsubmit="event.preventDefault(); submitSpecificProjectDetails();">
+                <!-- Project Name -->
+                <div>
+                    <label for="specificProjectName" class="text-lg font-medium text-blue-700">Project Name</label>
+                    <input type="text" id="specificProjectName" class="w-full p-4 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter project name" required>
+                </div>
+                <!-- Your Name -->
+                <div>
+                    <label for="specificCustomerName" class="text-lg font-medium text-blue-700">Your Name</label>
+                    <input type="text" id="specificCustomerName" class="w-full p-4 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your Name" required>
+                </div>
+                <!-- Phone Number -->
+                <div>
+                    <label for="specificPhone" class="text-lg font-medium text-blue-700">Phone Number</label>
+                    <input type="text" id="specificPhone" class="w-full p-4 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Phone Number" required>
+                </div>
+                <!-- Email -->
+                <div>
+                    <label for="specificEmail" class="text-lg font-medium text-blue-700">Email</label>
+                    <input type="email" id="specificEmail" class="w-full p-4 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" required>
+                </div>
+                <!-- Address -->
+                <div>
+                    <label for="specificAddress" class="text-lg font-medium text-blue-700">Address</label>
+                    <textarea id="specificAddress" class="w-full p-4 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your address" required></textarea>
+                </div>
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 btn-hover">
+                        Submit Project
+                    </button>
+                </div>
+            </form>
+
+            <!-- Loading Animation -->
+            <div id="loadingMessage" class="text-center text-blue-600 mt-4 p-4 hidden">
+                <p class="font-medium">Submitting your project details...</p>
+                <div class="dot-container">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+
+            <!-- Project Details Message -->
+            <div id="responseMessage" class="order-details hidden fade-in">
+                <h3 class="text-center font-bold">Project Details:</h3>
+                <p><strong>Project Name:</strong> <span id="responseProjectName"></span></p>
+                <p><strong>Customer Name:</strong> <span id="responseCustomerName"></span></p>
+                <p><strong>Phone:</strong> <span id="responsePhone"></span></p>
+                <p><strong>Email:</strong> <span id="responseEmail"></span></p>
+                <p><strong>Address:</strong> <span id="responseAddress"></span></p>
+            </div>
+
+            <!-- Order Confirmed Message -->
+            <div id="orderConfirmedMessage" class="hidden">
+                <div class="green-glow"></div> <!-- Full-screen green glow -->
+                <div class="order-confirmed">
+                    <div class="tick-mark-wrapper">
+                        <svg class="tick-mark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8 mx-auto">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-green-700 mb-4">Order Booked Successfully!</h2>
+                    <p class="text-lg font-medium text-gray-700">Your project details have been successfully confirmed! <span role="img" aria-label="thank you">😊</span></p>
+                    <p class="mt-2 text-sm text-gray-500">We will get back to you soon with further updates.</p>
+                </div>
+            </div>
+
+            <!-- Back to Home Button -->
+            <div class="mt-6 text-center">
+                <button onclick="backToHome();" class="py-2 px-8 bg-gray-600 text-white rounded-lg hover:bg-gray-700 btn-hover">
+                    Back to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Updated backToHome function to scroll to the Home section in index.html
+        function backToHome() {
+            const homeSection = document.getElementById('home');
+            if (homeSection) {
+                homeSection.scrollIntoView({ behavior: "smooth" }); // Smooth scroll to Home section
+            } else {
+                window.location.href = 'home.html'; // If the home section isn't found, fallback to loading the homepage
+            }
+        }
+
+        async function submitSpecificProjectDetails() {
+            const projectName = document.getElementById('specificProjectName').value;
+            const customerName = document.getElementById('specificCustomerName').value;
+            const phone = document.getElementById('specificPhone').value;
+            const email = document.getElementById('specificEmail').value;
+            const address = document.getElementById('specificAddress').value;
+
+            if (!projectName || !customerName || !phone || !email || !address) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            // Show the loading animation and hide the form
+            document.getElementById('loadingMessage').classList.remove('hidden');
+            document.getElementById('specificProjectForm').classList.add('hidden');
+
+            try {
+                const response = await fetch('http://localhost:3003/specific-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        projectName,
+                        customerName,
+                        phone,
+                        email,
+                        address
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText);
+                }
+
+                // Display the project details
+                document.getElementById('responseProjectName').textContent = projectName;
+                document.getElementById('responseCustomerName').textContent = customerName;
+                document.getElementById('responsePhone').textContent = phone;
+                document.getElementById('responseEmail').textContent = email;
+                document.getElementById('responseAddress').textContent = address;
+
+                // Show the order confirmed message
+                document.getElementById('loadingMessage').classList.add('hidden');
+                document.getElementById('orderConfirmedMessage').classList.remove('hidden');
+                document.getElementById('responseMessage').classList.remove('hidden');
+
+                setTimeout(() => {
+                    document.getElementById('orderConfirmedMessage').classList.add('hidden');
+                    document.getElementById('specificProjectForm').classList.remove('hidden'); // Show form again
+                }, 5000);
+
+                document.getElementById('specificProjectForm').reset();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error submitting project details: ' + error.message);
+                // Hide the loading animation and show the form again in case of error
+                document.getElementById('loadingMessage').classList.add('hidden');
+                document.getElementById('specificProjectForm').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

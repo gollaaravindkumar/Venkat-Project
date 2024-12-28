@@ -1,0 +1,478 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+.btn-attractive {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-attractive:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.delete-icon {
+    cursor: pointer;
+    color: red;
+    font-size: 20px;
+}
+
+.cart-container {
+    padding: 20px;
+}
+
+/* Additional Styles */
+.project-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.project-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    transition: transform 0.2s;
+}
+
+.project-card:hover {
+    transform: scale(1.05);
+}
+
+.splash-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.logo {
+    width: 200px;
+}
+
+.quotation {
+    font-style: italic;
+    color: #555;
+}
+
+.home-container {
+    display: none;
+    padding: 20px;
+}
+
+.auth-container {
+    display: none;
+    padding: 20px;
+}
+
+.specific-project-btn {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.specific-project-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+/* Header */
+header {
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 1.5em;
+    border-radius: 20px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Login/Register Section */
+#auth {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    color: white;
+}
+.splash-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #f9fafb, #f9f9fa);
+    color: white;
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+/* For the logo inside the splash screen */
+.splash-screen .logo {
+    width: 500px;
+    height: auto;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease; /* Smooth transition */
+}
+
+/* Zoom effect on hover */
+.splash-screen .logo:hover {
+    transform: scale(1.2); /* Zoom in by 20% */
+}
+
+
+
+.splash-screen .quotation {
+    font-size: 1.5em;
+    color: #0a0a0a;
+    font-style: italic;
+    text-align: center;
+    max-width: 600px;
+}
+
+#auth > div {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    animation: slideIn 0.8s ease-in-out;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#auth h2 {
+    color: #333;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+#auth input {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 12px;
+    margin: 10px 0;
+    width: 100%;
+    font-size: 1em;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+#auth input:focus {
+    border-color: #6610f2;
+    box-shadow: 0 0 8px rgba(102, 16, 242, 0.3);
+}
+
+#auth button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+#auth button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+#auth p {
+    font-size: 0.9em;
+    margin-top: 20px;
+    color: #555;
+}
+
+#auth a {
+    color: #6610f2;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#auth a:hover {
+    text-decoration: underline;
+}
+
+/* Home Section */
+#home {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+button {
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+button:hover {
+    background: linear-gradient(90deg, #6610f2, #007bff);
+    transform: scale(1.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+#confirmationPage span {
+    font-size: 3em;
+    color: green;
+}
+
+button {
+    margin: 10px 0;
+    padding: 10px 15px;
+}
+/* Style for the Developer Info Button */
+.developer-info-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #1a73e8;
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.developer-info-btn:hover {
+    background-color: #0a58ca;
+}
+
+/* Style for the Developer Info Popup */
+.developer-info-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.developer-info-popup div {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.developer-info-popup ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    padding: 0;
+}
+
+.developer-info-popup ul li {
+    font-size: 22px;
+}
+
+.developer-info-popup ul li a i {
+    color: #1a73e8;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.developer-info-popup ul li a i:hover {
+    color: #0a58ca;
+    transform: scale(1.2);
+}
+
+/* Inputs */
+input {
+    padding: 12px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
+}
+input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Project List */
+#projectList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.projectCard {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    border-radius: 19px;
+    width: calc(25% - 20px);
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    text-align: center;
+}
+.projectCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+.projectCard img {
+    width: 100%; /* Ensures the image fits the card width */
+    height: 150px; /* Fixed height for uniformity */
+    object-fit: cover; /* Ensures the image scales and crops proportionally */
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.projectCard h3 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+#projectList {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Search Bar */
+#searchBar {
+    margin: 20px auto;
+    padding: 10px;
+    max-width: 600px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+#searchBar:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Project Details */
+#projectDetails {
+    display: none;
+}
+#projectDetails img {
+    max-width: 100%;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+#componentsUsed {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+/* Cart */
+#cart {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .projectCard {
+        width: calc(50% - 20px);
+    }
+}
+@media (max-width: 480px) {
+    .projectCard {
+        width: 100%;
+    }
+}
+/* Custom Styles for Specific Project Button */
+.specific-project-btn {
+    display: inline-block;
+    padding: 16px 32px;
+    background: linear-gradient(90deg, #007bff, #6610f2); /* Blue background */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.specific-project-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.1); /* Scale up the button */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4); /* Add subtle shadow on hover */
+}
+
+.specific-project-btn:focus {
+    outline: none;
+}
+
+.specific-project-btn:active {
+    transform: scale(1.05); /* Slightly scale down when clicked */
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3); /* Reduced shadow on click */
+}

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Na Pariyojana Store</title>
+    <link rel="icon" href="./images/logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="firebaseauth.js"></script>
+</head>
+
+<style>
+    /* General Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+    
+    /* Splash Screen */
+    .splash-screen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: #ffffff;
+        z-index: 9999;
+        animation: fadeOut 5s forwards;
+    }
+    
+    .splash-screen img {
+        width: 700px;
+        height: auto;
+    }
+    
+    /* Adjust logo for mobile screens */
+    @media (max-width: 768px) {
+        .splash-screen img {
+            width: 200px; /* Smaller logo on mobile */
+            display: block;
+            margin: 0 auto; /* Center the logo */
+        }
+    }
+    
+    .splash-screen p {
+        font-size: 18px;
+        font-style: italic;
+        margin-top: 20px;
+        color: #555;
+        text-align: center;
+    }
+    
+    @keyframes fadeOut {
+        to {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+    
+    /* Authentication Container */
+    .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #00b4d8, #0077b6);
+        animation: gradient-shift 8s infinite alternate;
+        transition: background 1s ease-in-out;
+    }
+    
+    @keyframes gradient-shift {
+        0% {
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+        }
+    
+        100% {
+            background: linear-gradient(135deg, #0077b6, #00b4d8);
+        }
+    }
+    
+    /* Form Containers */
+    .form-container {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        animation: fadeIn 0.6s forwards;
+        transform: translateY(-20px);
+        position: absolute;
+        transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    }
+    
+    .form-container.hidden {
+        display: none;
+    }
+    
+    /* Sliding Transition */
+    .form-container.slide-left {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    
+    .form-container.slide-right {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    
+    .form-container.active {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    
+    h2 {
+        font-size: 1.8rem;
+        color: #333;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: color 0.3s ease;
+    }
+    
+    /* Input Fields */
+    input,
+    select {
+        width: 100%;
+        padding: 14px;
+        margin: 10px 0;
+        font-size: 16px;
+        border: 2px solid #dce4f3;
+        border-radius: 8px;
+        background: #e1f5fe;
+        transition: all 0.3s ease;
+    }
+    
+    input:focus,
+    select:focus {
+        border-color: #0099cc;
+        outline: none;
+        background: #ffffff;
+    }
+    
+    input::placeholder {
+        color: #9baabc;
+        font-size: 14px;
+    }
+    
+    /* Buttons */
+    button {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        background: linear-gradient(135deg, #00b4d8, #0077b6);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+    
+    button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(135deg, #0077b6, #00b4d8);
+    }
+    
+    /* Error Message */
+    #error-message {
+        color: red;
+        margin-top: 10px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    /* Modal Styles */
+    .modal {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        animation: fadeInModal 0.3s forwards;
+    }
+    
+    @keyframes fadeInModal {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
+    
+    #modalIcon {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+    
+    .success {
+        color: green;
+    }
+    
+    .error {
+        color: red;
+    }
+    
+    button[type="button"] {
+        padding: 10px 20px;
+        border: none;
+        background-color: #0099cc;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    
+    /* Links */
+    a {
+        color: #0099cc;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    
+    a:hover {
+        color: #0077b6;
+        text-decoration: underline;
+    }
+    
+    /* Input icons */
+    .input-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9baabc;
+        font-size: 18px;
+        pointer-events: none;
+    }
+    
+    .input-wrapper {
+        position: relative;
+        width: 100%;
+    }
+    
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="number"],
+    input[type="date"],
+    select {
+        padding-left: 40px;
+    }
+    
+    /* Animations for Form Elements */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    /* Mobile and Responsive Styles */
+    @media (max-width: 768px) {
+        .form-container {
+            width: 90%;
+            padding: 1.5rem;
+        }
+    
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+    
+        input,
+        select,
+        button {
+            font-size: 14px;
+            padding: 12px;
+        }
+    
+        .modal-content {
+            max-width: 90%;
+        }
+    
+        .splash-screen img {
+            width: 350px; /* Increase logo size */
+            margin: 0 auto; /* Ensure it's centered */
+            display: block;
+        }
+    }
+    
+    /* Tablet Landscape and Small Screens */
+    @media (max-width: 1024px) {
+        .form-container {
+            width: 80%;
+            padding: 1.8rem;
+        }
+    
+        h2 {
+            font-size: 1.7rem;
+        }
+    
+        input,
+        select,
+        button {
+            font-size: 15px;
+            padding: 13px;
+        }
+    }
+    
+    /* Larger Screens */
+    @media (min-width: 1025px) {
+        .form-container {
+            width: 400px;
+        }
+    
+        h2 {
+            font-size: 1.8rem;
+        }
+    }
+    
+    </style>
+    
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div>
+            <img src="./images/logo.jpg" alt="Logo">
+            <h2><p>"Transforming ideas into reality with every project."</p></h2>
+        </div>
+    </div>
+
+    <!-- Authentication Section -->
+    <div class="auth-container" id="authContainer">
+        <!-- Login Form -->
+        <div class="form-container" id="login-section">
+            <h2>Login to </h2>
+            <h2>Na Pariyojana</h2>
+            <form id="loginForm">
+                <div class="input-wrapper">
+                    <i class="fa fa-user input-icon"></i>
+                    <input type="text" id="username" placeholder="Username" required><br>
+                </div>
+                <div class="input-wrapper">
+                    <i class="fa fa-lock input-icon"></i>
+                    <input type="password" id="password" placeholder="Password" required><br>
+                </div>
+                <button type="submit">Sign In</button>
+                <p>Don't have an account? Register here</p>
+                <button type="button" onclick="toggleForm()">Sign Up</button>
+            </form>
+            <div id="error-message"></div>
+        </div>
+
+        <!-- Register Form -->
+        <div class="form-container hidden" id="register-section">
+            <h2>Create An Account</h2>
+            <div class="input-wrapper">
+                <i class="fa fa-user input-icon"></i>
+                <input type="text" placeholder="Username" id="register-username">
+            </div>
+            <div class="input-wrapper">
+                <i class="fa fa-birthday-cake input-icon"></i>
+                <input type="number" placeholder="Age" id="register-age">
+            </div>
+            <div class="input-wrapper">
+                <i class="fa fa-venus-mars input-icon"></i>
+                <select id="register-gender">
+                    <option value="" disabled selected>Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="input-wrapper">
+                <i class="fa fa-phone input-icon"></i>
+                <input type="text" placeholder="Phone Number" id="register-phone">
+            </div>
+            <div class="input-wrapper">
+                <i class="fa fa-envelope input-icon"></i>
+                <input type="email" placeholder="Email Address" id="register-email">
+            </div>
+            <div class="input-wrapper">
+                <i class="fa fa-map-marker input-icon"></i>
+                <input type="text" placeholder="Address" id="register-address">
+            </div>
+            <div class="input-wrapper">
+                <i class="fa fa-lock input-icon"></i>
+                <input type="password" placeholder="Password" id="register-password">
+            </div>
+            <button onclick="registerUser()">Sign up</button>
+            <p>Already have an account? <a href="#" onclick="toggleForm()">signIn</a></p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div id="modalIcon"></div>
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Splash Screen
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('splashScreen').style.display = "none";
+                document.getElementById('authContainer').style.display = "flex";
+            }, 7777);
+        };
+
+        // Toggle Login/Register Forms
+        function toggleForm() {
+            document.getElementById('login-section').classList.toggle('hidden');
+            document.getElementById('register-section').classList.toggle('hidden');
+        }
+
+        // Modal Display
+        function showModal(message, type) {
+            const modal = document.getElementById('modal');
+            const icon = document.getElementById('modalIcon');
+            document.getElementById('modalMessage').innerText = message;
+
+            icon.innerHTML = type === 'success' ? '✔' : '✖';
+            icon.className = type;
+
+            modal.style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = "none";
+        }
+
+        // Handle Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('http://localhost:3003/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+
+            if (data.message === 'Login Successful!') {
+                localStorage.setItem('user', JSON.stringify(data.user));
+                showModal(data.message, 'success');
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 2000);
+            } else {
+                document.getElementById('error-message').innerText = data.message;
+            }
+        });
+
+        // Handle Registration
+        function registerUser() {
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            const email = document.getElementById('register-email').value;
+            const age = document.getElementById('register-age').value;
+            const phone = document.getElementById('register-phone').value;
+            const address = document.getElementById('register-address').value;
+            const gender = document.getElementById('register-gender').value;
+
+            if (!username || !password || !email || !age || !phone || !address || !gender) {
+                showModal("Please fill all the fields", "error");
+                return;
+            }
+
+            const user = { username, password, email, age, phone, address, gender };
+
+            fetch('http://localhost:3003/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    showModal(data.message, data.message === "Registration Complete!" ? "success" : "error");
+                })
+                .catch(err => {
+                    showModal("Error: " + err.message, "error");
+                });
+        }
+    </script>
+</body>
+
+
+</html>
